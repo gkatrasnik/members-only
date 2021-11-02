@@ -80,3 +80,37 @@ exports.signup_post = [
     }
   },
 ];
+
+exports.membership_password_get = function (req, res) {
+  res.render("membership-password");
+};
+
+exports.membership_password_post = async function (req, res) {
+  if (req.body.membership_password != process.env.MEMBERSHIP_PASSWORD) {
+    res.send("napačno geslo");
+  } else {
+    const user = new User(res.locals.currentUser);
+    user.member = true;
+
+    await User.findByIdAndUpdate(
+      res.locals.currentUser._id,
+      user,
+      {},
+      (err) => {
+        if (err) return next(err);
+        return res.redirect("/");
+      }
+    );
+  }
+};
+
+exports.leave_membership_post = async function (req, res) {
+  const user = new User(res.locals.currentUser);
+  console.log(user);
+  user.member = false;
+
+  await User.findByIdAndUpdate(res.locals.currentUser._id, user, {}, (err) => {
+    if (err) return next(err);
+    return res.redirect("/");
+  });
+};

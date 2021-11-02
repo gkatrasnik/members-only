@@ -9,9 +9,15 @@
   <body>
     <h1>Members Only</h1>
 
-    <% if (user) {%>
-
+    <% if (user) {%> <% if (user.member) {%>
+    <h2>welcome - <%= user.username %> (member)</h2>
+    <form action="/leave-membership" method="POST">
+      <button>Leave membership</button>
+    </form>
+    <% } else { %>
     <h2>welcome - <%= user.username %></h2>
+    <a href="/membership-password">Become a member</a>
+    <%}%>
     <a href="/log-out">Log Out</a>
     <% } else { %>
     <h2>Log In or Sign Up</h2>
