@@ -25,4 +25,6 @@ router.post("/become-admin", controller.become_admin_post);
 
 router.post("/leave-admin", controller.leave_admin_post);
 
+router.post("/delete", controller.delete_post_post);
+
 module.exports = router;

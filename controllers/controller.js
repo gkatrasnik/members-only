@@ -176,3 +176,15 @@ exports.leave_admin_post = async function (req, res) {
     return res.redirect("/");
   });
 };
+
+exports.delete_post_post = function (req, res) {
+  Post.findByIdAndRemove(
+    req.body.id,
+    (deleteMessage = (err) => {
+      if (err) {
+        return next(err);
+      }
+      res.redirect("/");
+    })
+  );
+};
