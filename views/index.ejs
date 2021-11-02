@@ -2,35 +2,37 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link href="/stylesheets/style.css" rel="stylesheet" type="text/css" />
+        <link href="/stylesheets/style.css" rel="stylesheet" type="text/css" />
+
 
     <title></title>
   </head>
   <body>
+    <div class="flex flex-col"></div>
     <h1>Members Only</h1>
 
     <% if (user) {%> 
       <% if (user.member) {%>
-        <h2>welcome - <%= user.username %> (member)</h2>
+        <h2>welcome - <%= user.username %> (member) <% if (user.admin) {%> (admin) <% }%></h2>
         <form action="/leave-membership" method="POST">
           <button>Leave Membership</button>
         </form>   
       <% } else { %>
         <h2>welcome - <%= user.username %></h2>
-        <a href="/become-member">Become Member</a>
+        <a href="/become-member"><button>Become Member</button></a>
       <%}%>
       <% if (user.admin) {%>
         <form action="/leave-admin" method="POST">
           <button>Leave Admin</button>
         </form>
       <% } else { %>  
-        <a href="/become-admin">Become Admin</a>
+        <a href="/become-admin"><button>Become Admin</button></a>
       <%}%>
-      <a href="/create-post">Create new post</a>
-      <a href="/log-out">Log Out</a>
+      <a href="/create-post"><button>Create New Post</button></a>
+      <a href="/log-out"><button>Log Out</button></a>
 
       <% for(var i=0; i<posts.length; i++) { %>
-        <div class="border-2">
+        <div class="post">
           <h4><%= posts[i].title %></h4>
           <p><%= posts[i].content %></p>      
           <% if (user.member) {%>
@@ -49,19 +51,16 @@
         </div>
       <% } %>
 
-
-   
-
-    
+  
 
     <% } else { %>
     <h2>Log In or Sign Up</h2>
 
-    <a href="/sign-up">Sign Up</a>
-    <a href="/log-in">Log In</a>
+    <a href="/sign-up"><button>Sign Up</button></a>
+    <a href="/log-in"><button>Log In</button></a>
 
     <%}%>
     
-    
+    </div>
   </body>
 </html>
