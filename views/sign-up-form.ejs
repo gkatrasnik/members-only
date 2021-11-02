@@ -3,23 +3,37 @@
   <head>
     <meta charset="UTF-8" />
     <title></title>
+    <link href="/stylesheets/style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <h1>Authentication practice</h1>
+    <h1>Members Only</h1>
 
     <h2>Sign Up</h2>
-    <form action="" method="POST">
-      <label for="first_name">First Name</label>
-      <input name="first_name" type="text" />
-      <label for="family_name">Last Name</label>
-      <input name="family_name" type="text" />
-      <label for="username">Username</label>
-      <input name="username" placeholder="username" type="text" />
-      <label for="password">Password</label>
-      <input name="password" type="password" />
 
+    <form action="" method="POST" class="flex flex-col">
+      <div>
+        <label for="first_name">First Name</label>
+        <input name="first_name" type="text" />
+      </div>
+      <div>
+        <label for="family_name">Last Name</label>
+        <input name="family_name" type="text" />
+      </div>
+      <div>
+        <label for="username">Username</label>
+        <input name="username" placeholder="username" type="text" />
+      </div>
+      <div>
+        <label for="password">Password</label>
+        <input name="password" type="password" />
+      </div>
+      <div>
+        <label for="password_validate">Confirm Password</label>
+        <input name="validate" type="password" />
+      </div>
       <button>Sign Up</button>
     </form>
-    <a href="/">Already have an account? Log in!</a>
+    <a href="/log-in">Already have an account? Log in!</a>
+    <a href="/">Home</a>
   </body>
 </html>
