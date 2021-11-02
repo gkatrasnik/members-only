@@ -1,10 +1,21 @@
 var passport = require("passport");
 var bcrypt = require("bcryptjs");
 var User = require("../models/user");
+var Post = require("../models/post");
+
 const { body, validationResult } = require("express-validator");
 
 exports.index = function (req, res) {
-  res.render("index", { user: res.locals.currentUser });
+  Post.find({}, "title content timestamp user")
+    .sort({ timestamp: -1 })
+    .populate("user")
+    .exec(function (err, list_posts) {
+      if (err) {
+        return next(err);
+      }
+      //succesful, so render
+      res.render("index", { user: res.locals.currentUser, posts: list_posts });
+    });
 };
 
 exports.login_get = function (req, res) {
@@ -70,6 +81,7 @@ exports.signup_post = [
           first_name: req.body.first_name,
           family_name: req.body.family_name,
           member: false,
+          admin: false,
         }).save((err) => {
           if (err) {
             return next(err);
@@ -81,13 +93,13 @@ exports.signup_post = [
   },
 ];
 
-exports.membership_password_get = function (req, res) {
-  res.render("membership-password");
+exports.become_member_get = function (req, res) {
+  res.render("become-member");
 };
 
-exports.membership_password_post = async function (req, res) {
+exports.become_member_post = async function (req, res) {
   if (req.body.membership_password != process.env.MEMBERSHIP_PASSWORD) {
-    res.send("napačno geslo");
+    res.send("Wrong password");
   } else {
     const user = new User(res.locals.currentUser);
     user.member = true;
@@ -109,6 +121,56 @@ exports.leave_membership_post = async function (req, res) {
   console.log(user);
   user.member = false;
 
+  await User.findByIdAndUpdate(res.locals.currentUser._id, user, {}, (err) => {
+    if (err) return next(err);
+    return res.redirect("/");
+  });
+};
+
+exports.create_post_get = function (req, res) {
+  res.render("create-post");
+};
+
+exports.create_post_post = function (req, res) {
+  const post = new Post({
+    title: req.body.title,
+    content: req.body.content,
+    timestamp: Date.now(),
+    user: res.locals.currentUser,
+  }).save((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/");
+  });
+};
+
+exports.become_admin_get = (req, res) => {
+  res.render("become-admin");
+};
+
+exports.become_admin_post = async function (req, res) {
+  if (req.body.admin_password != process.env.ADMIN_PASSWORD) {
+    res.send("Wrong password");
+  } else {
+    const user = new User(res.locals.currentUser);
+    user.admin = true;
+
+    await User.findByIdAndUpdate(
+      res.locals.currentUser._id,
+      user,
+      {},
+      (err) => {
+        if (err) return next(err);
+        return res.redirect("/");
+      }
+    );
+  }
+};
+
+exports.leave_admin_post = async function (req, res) {
+  const user = new User(res.locals.currentUser);
+  user.admin = false;
   await User.findByIdAndUpdate(res.locals.currentUser._id, user, {}, (err) => {
     if (err) return next(err);
     return res.redirect("/");

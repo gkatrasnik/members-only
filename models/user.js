@@ -8,6 +8,7 @@ var UserSchema = new Schema({
   username: { type: String, required: true },
   password: { type: String, required: true },
   member: { type: Boolean, required: true, default: false },
+  admin: { type: Boolean, required: true, default: false },
 });
 
 // Virtual for user's full name
